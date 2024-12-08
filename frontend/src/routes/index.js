@@ -8,7 +8,7 @@ export const routes = [
         page: LoginPage,
     },
     {
-        path: '/admin/user',
+        path: '/admin/product',
         page: ManageProductPage,
         isShowDashboardAdmin: true,
         pageIndex: 2,
