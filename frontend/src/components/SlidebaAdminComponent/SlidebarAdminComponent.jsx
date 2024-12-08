@@ -26,11 +26,11 @@ const SlidebarComponent = ({ curentpage }) => {
                     </div>
                 </div>
                 <div className='wrap-item-container'>
-                    <div className={`wrap-item ${curentpage === 1 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/home")}>
+                    {/* <div className={`wrap-item ${curentpage === 1 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/home")}>
                         <img src={home} alt='home' width="20px" />
                         <div>Trang chủ</div>
-                    </div>
-                    <div className={`wrap-item ${curentpage === 2 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/user")}>
+                    </div> */}
+                    <div className={`wrap-item ${curentpage === 2 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/product")}>
                         <img src={print} alt='my-account' width="20px" />
                         <div>Quản lý sản phẩm</div>
                     </div>

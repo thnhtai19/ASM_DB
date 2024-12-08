@@ -156,7 +156,8 @@ CREATE TABLE PhuongThucVanChuyen (
 
 -- Bảng Xuất hàng
 CREATE TABLE XuatHang (
-    MaSanPham INT PRIMARY KEY,
+    MaXuatHang INT PRIMARY KEY AUTO_INCREMENT,
+    MaSanPham INT,
     MaNguoiBan CHAR(12) NOT NULL,
     MaVanChuyen INT NOT NULL,
     CONSTRAINT fk_XuatHang_SanPham FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham)
@@ -656,16 +657,28 @@ DELIMITER ;
 
 -- Dữ liệu mẫu cho bảng NguoiDung
 INSERT INTO NguoiDung (CCCD, MatKhau, Email, HoTen, SDT) VALUES
-('001062946357', 'Abc!1234', 'a@gmail.com', 'Nguyễn Văn A', '0912345678'),
-('066200000274', '!23A56789l', 'vunguyen@gmail.com', 'Nguyễn Minh Vũ', '0934127856'),
-('037962011863', '8888A#a8888', 'congthanh2002@gmail.com', 'Nguyễn Thành Công', '0914723685'),
-('011167000556', '357%Adc357', 'bagiang147@gmail.com', 'Giảng Thị Bà', '0918324657'),
-('012345678911', '110100Cd#', 'hueto123@gmail.com', 'Tô Văn Huệ', '0912345687'),
-('083204000946', 'T123456@1t', 'thinh.nguyen04@hcmut.edu.vn', 'Nguyễn Trường Thịnh', '0838592692'),
-('083811234432', 'Nopass0!', 'truongthinhbte@gmail.com.vn', 'Nguyễn Ngọc Thịnh', '0918382947'),
-('032532297682', 'abcdef$123', 'b@gmail.com', 'Tran Thi B', '0923456789'),
-('038180000947', '3434f^F3434', 'liemphan@gmail.com', 'Phan Thị Liêm', '0945680888'),
-('111122223333', 'Cisco&packet0', 'admin@gmail.com', 'Admin', '0753826373');
+-- Người mua
+('001062946357', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'a@gmail.com', 'Nguyễn Văn A', '0912345678'),
+('066200000274', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'vunguyen@gmail.com', 'Nguyễn Minh Vũ', '0934127856'),
+('037962011863', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'congthanh2002@gmail.com', 'Nguyễn Thành Công', '0914723685'),
+('011167000556', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'bagiang147@gmail.com', 'Giảng Thị Bà', '0918324657'),
+('012345678911', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'hueto123@gmail.com', 'Tô Văn Huệ', '0912345687'),
+('083204000946', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'thinh.nguyen04@hcmut.edu.vn', 'Nguyễn Trường Thịnh', '0838592692'),
+
+-- Người bán
+('083811234432', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'truongthinhbte@gmail.com.vn', 'Nguyễn Ngọc Thịnh', '0918382947'),
+('032532297682', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'b@gmail.com', 'Tran Thi B', '0923456789'),
+('038180000947', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'liemphan@gmail.com', 'Phan Thị Liêm', '0945680888'),
+('001062946358', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'tranthib@gmail.com', 'Trần Thị Bình', '0917654321'),
+('001062946359', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'leminhc@gmail.com', 'Lê Minh Châu', '0981234567'),
+('001062946360', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'phamvuongd@gmail.com', 'Phạm Vương Dũng', '0938765432'),
+('001062946361', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'hoanghonganh@gmail.com', 'Hoàng Hồng Anh', '0975432198'),
+('001062946362', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'danghuuthang@gmail.com', 'Đặng Hữu Thắng', '0923456781'),
+('001062946363', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'vothituyet@gmail.com', 'Võ Thị Tuyết', '0945678912'),
+('001062946364', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'dongthanhdat@gmail.com', 'Đồng Thành Đạt', '0967891234'),
+
+-- Admin
+('111122223333', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'admin@gmail.com', 'Admin', '0753826373');
 
 -- Dữ liệu mẫu cho bảng Người mua
 INSERT INTO NguoiMua (MaNguoiMua, NgaySinh) VALUES
@@ -680,7 +693,14 @@ INSERT INTO NguoiMua (MaNguoiMua, NgaySinh) VALUES
 INSERT INTO NguoiBan (MaNguoiBan, NgaySinh) VALUES
 ('083811234432', '2004-09-30'),
 ('032532297682', '1979-08-24'),
-('038180000947', '1979-11-25');
+('038180000947', '1979-11-25'),
+('001062946358', '1980-01-15'),
+('001062946359', '1981-06-12'),
+('001062946360', '1982-03-08'),
+('001062946361', '1983-07-19'),
+('001062946362', '1984-10-22'),
+('001062946363', '1985-05-11'),
+('001062946364', '1986-12-05');
 
 -- Dữ liệu mẫu cho bảng Admin
 INSERT INTO Admin (MaAdmin) VALUES
@@ -688,34 +708,106 @@ INSERT INTO Admin (MaAdmin) VALUES
 
 -- Dữ liệu mẫu cho bảng Danh mục
 INSERT INTO DanhMuc (TenDanhMuc, MoTa, ThuTuHienThi) VALUES
-('Giảm giá', 'Hàng hóa đang được giảm giá', 1),
-('Nam', 'Thời trang cho nam', 2),
-('Nữ', 'Thời trang cho nữ', 3);
+('Thời trang', 'Thời trang dành cho nam và nữ', 1),
+('Thiết bị điện tử', 'Các thiết bị điện tử như điện thoại, laptop, TV và phụ kiện', 2),
+('Đồ gia dụng', 'Các sản phẩm gia dụng tiện ích', 3),
+('Sách', 'Sách học tập, truyện và văn học', 4),
+('Đồ chơi trẻ em', 'Đồ chơi và thiết bị giáo dục trẻ em', 5),
+('Thực phẩm', 'Thực phẩm sạch và đồ khô', 6),
+('Đồ thể thao', 'Dụng cụ và trang phục thể thao', 7),
+('Mỹ phẩm', 'Mỹ phẩm và sản phẩm chăm sóc cá nhân', 8),
+('Văn phòng phẩm', 'Dụng cụ học tập và văn phòng', 9),
+('Đồ dùng du lịch', 'Balo, vali và dụng cụ du lịch', 10);
+
+
 
 -- Dữ liệu mẫu cho bảng Cửa hàng
 INSERT INTO CuaHang (DiaChi, MoTa, TenCuaHang, MaNguoiBan) VALUES
-('164C Đường Phan Đình Phùng', 'Chuyên bán quần áo thể thao', 'Shop X', '032532297682'),
-('98 Đường Ngô Quyền', 'Chuyên bán quần áo và phụ kiện chi nữ', 'Shop Y', '083811234432'),
-('38B Đường Hoa Lạc', 'Chuyên bán quần áo dạo phố', 'Shop Z', '038180000947');
+('123 Lê Lợi, Quận 1, TP.HCM', 'Chuyên bán thời trang nam nữ cao cấp', 'Thời Trang Luxury', '083811234432'),
+('456 Nguyễn Trãi, Quận 5, TP.HCM', 'Cửa hàng thiết bị điện tử uy tín', 'TechZone', '032532297682'),
+('789 Điện Biên Phủ, Quận 10, TP.HCM', 'Đồ gia dụng thông minh và tiết kiệm', 'HomeSmart', '038180000947'),
+('12 Trần Hưng Đạo, Quận 1, TP.HCM', 'Hiệu sách với hàng ngàn đầu sách hấp dẫn', 'Book Haven', '001062946358'),
+('34 Phan Xích Long, Quận Phú Nhuận, TP.HCM', 'Đồ chơi giáo dục và sáng tạo cho trẻ em', 'Kiddo World', '001062946359'),
+('56 Võ Văn Tần, Quận 3, TP.HCM', 'Thực phẩm hữu cơ và đồ khô', 'Organic Mart', '001062946360'),
+('78 Lý Thường Kiệt, Quận Tân Bình, TP.HCM', 'Cửa hàng dụng cụ thể thao', 'Sporty Life', '001062946361'),
+('90 Nguyễn Đình Chiểu, Quận 3, TP.HCM', 'Mỹ phẩm và sản phẩm chăm sóc da', 'Beauty Corner', '001062946362'),
+('101 Pasteur, Quận 1, TP.HCM', 'Dụng cụ văn phòng phẩm và quà lưu niệm', 'Office & More', '001062946363'),
+('202 Hai Bà Trưng, Quận 1, TP.HCM', 'Cửa hàng chuyên dụng cụ du lịch và balo', 'Travel Gear', '001062946364');
+
 
 -- Dữ liệu mẫu cho bảng Sản phẩm
 INSERT INTO SanPham (MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia) VALUES
-('Vải cotton', 'Áo', 'Áo thun nam', 1, 1, 100, 200000),
-('Dây nịt được làm 100% từ da cá sấu', 'Dây nịt', 'Dây nịt da cá sấu', 1, 1, 100, 1000000),
-('Tinh xảo và đẳng cấp', 'dây chuyền', 'Dây chuyền nữ', 3, 2, 100, 35000000),
-('Quần jeans co giãn', 'Quần', 'Quần jeans nữ', 3, 3, 500, 40000),
-('Giày thể thao nam', 'Giày', 'Giày sneaker', 2, 1, 30, 1500000),
-('Cá tính và sành điệu', 'Túi', 'Túi xách', 2, 3, 10, 2000000),
-('Chất liệu polyester, chống thấm nước', 'Áo khoác', 'Áo khoác nam', 1, 1, 50, 500000),
-('Thiết kế đơn giản, phong cách', 'Mũ', 'Mũ lưỡi trai', 1, 3, 200, 100000),
-('Chất liệu cotton, thấm hút tốt', 'Quần', 'Quần short nam', 2, 1, 120, 250000),
-('Thiết kế tinh tế, dành cho phái nữ', 'Khăn choàng', 'Khăn choàng lụa', 3, 3, 80, 300000),
-('Được làm từ bạc cao cấp', 'Nhẫn', 'Nhẫn bạc nữ', 3, 2, 150, 500000),
-('Phong cách thể thao, trẻ trung', 'Ba lô', 'Ba lô thời trang', 2, 3, 60, 800000),
-('Chất liệu da tổng hợp, chống nước', 'Giày', 'Giày lười nam', 1, 1, 40, 1200000),
-('Hợp thời trang, phù hợp đi làm', 'Túi', 'Cặp da công sở', 2, 1, 20, 2500000),
-('Đồng hồ cơ, dây thép không gỉ', 'Đồng hồ', 'Đồng hồ nam', 1, 1, 30, 5000000),
-('Dây chuyền vàng 18K', 'Dây chuyền', 'Dây chuyền vàng', 3, 2, 10, 15000000);
+-- Cửa hàng 1: Thời Trang Luxury
+('Vải cotton cao cấp, thoáng mát', 'Áo', 'Áo sơ mi công sở nam', 1, 1, 50, 350000),
+('Vải co giãn 4 chiều', 'Áo', 'Áo thun nữ cổ tròn', 1, 1, 100, 250000),
+('Chất liệu kaki', 'Quần', 'Quần short nam thời trang', 1, 1, 60, 200000),
+('Vải mềm mịn, dễ giặt', 'Quần', 'Quần tây nữ công sở', 1, 1, 40, 450000),
+('Form rộng, thiết kế hiện đại', 'Áo', 'Áo hoodie unisex', 1, 1, 80, 500000),
+
+-- Cửa hàng 2: TechZone
+('Màn hình OLED 6.5 inch', 'Điện thoại', 'iPhone 14 Pro Max', 2, 2, 30, 30000000),
+('CPU Intel Core i5, RAM 8GB', 'Laptop', 'Dell Inspiron 15', 2, 2, 15, 20000000),
+('Độ phân giải 4K, 43 inch', 'TV', 'Samsung Smart TV', 2, 2, 10, 15000000),
+('Switch cơ học, đèn RGB', 'Phụ kiện', 'Bàn phím Logitech G Pro', 2, 2, 50, 2500000),
+('Cảm biến quang học, 6 nút', 'Phụ kiện', 'Chuột không dây Logitech MX Anywhere', 2, 2, 70, 1200000),
+
+-- Cửa hàng 3: HomeSmart
+('Dung tích 1.5L, công suất 500W', 'Gia dụng', 'Máy xay sinh tố Philips', 3, 3, 20, 850000),
+('Tủ lạnh dung tích 50L, tiết kiệm điện', 'Gia dụng', 'Tủ lạnh mini Electrolux', 3, 3, 10, 3200000),
+('Công nghệ Rapid Air, dung tích 5L', 'Gia dụng', 'Nồi chiên không dầu Lock&Lock', 3, 3, 15, 2500000),
+('Bề mặt kính chịu lực, công suất 2000W', 'Gia dụng', 'Bếp từ đơn Sunhouse', 3, 3, 25, 1200000),
+('Động cơ mạnh mẽ, pin sạc', 'Gia dụng', 'Máy hút bụi cầm tay Xiaomi', 3, 3, 30, 1500000),
+
+-- Cửa hàng 4: Book Haven
+('Tiểu thuyết giả tưởng, 7 tập', 'Sách', 'Harry Potter Bộ Đầy Đủ', 4, 4, 100, 850000),
+('Sách kỹ năng giao tiếp', 'Sách', 'Đắc Nhân Tâm', 4, 4, 80, 150000),
+('Sách tham khảo toán học lớp 10', 'Sách', 'Tuyển tập bài tập Toán lớp 10', 4, 4, 150, 95000),
+('Truyện tranh thiếu nhi', 'Sách', 'Doraemon Tập 1', 4, 4, 200, 30000),
+('Sách học từ vựng và ngữ pháp', 'Sách', 'Oxford Advanced Learner Dictionary', 4, 4, 50, 350000),
+
+-- Cửa hàng 5: Kiddo World
+('Bộ lắp ráp chi tiết lớn', 'Đồ chơi', 'Lego Classic Basic', 5, 5, 60, 400000),
+('Đồ chơi giáo dục thông minh', 'Đồ chơi', 'Bộ ghép hình số học trẻ em', 5, 5, 50, 250000),
+('Chất liệu gỗ tự nhiên', 'Đồ chơi', 'Bộ xếp hình chữ cái', 5, 5, 40, 200000),
+('Xe hơi điều khiển từ xa', 'Đồ chơi', 'Ô tô RC tốc độ cao', 5, 5, 30, 450000),
+('Búp bê thời trang', 'Đồ chơi', 'Búp bê Barbie', 5, 5, 70, 300000),
+
+-- Cửa hàng 6: Organic Mart
+('Sản phẩm hữu cơ, tươi ngon', 'Thực phẩm', 'Rau củ hữu cơ', 6, 6, 200, 30000),
+('Sản phẩm 100% tự nhiên', 'Thực phẩm', 'Gạo lứt hữu cơ', 6, 6, 150, 45000),
+('Không chất bảo quản', 'Thực phẩm', 'Trái cây tươi', 6, 6, 180, 70000),
+('Sản phẩm chế biến sẵn, dễ sử dụng', 'Thực phẩm', 'Mì ăn liền hữu cơ', 6, 6, 250, 15000),
+('Cung cấp năng lượng tự nhiên', 'Thực phẩm', 'Hạt chia hữu cơ', 6, 6, 100, 180000),
+
+-- Cửa hàng 7: Sporty Life
+('Chất liệu thoáng khí, dễ dàng di chuyển', 'Dụng cụ thể thao', 'Giày thể thao nam', 7, 7, 120, 600000),
+('Chất liệu bền, chống nước', 'Dụng cụ thể thao', 'Balo thể thao', 7, 7, 90, 350000),
+('Vật liệu siêu nhẹ, thoải mái sử dụng', 'Dụng cụ thể thao', 'Dây nhảy tập thể dục', 7, 7, 150, 150000),
+('Chống sốc, dễ dàng mang theo', 'Dụng cụ thể thao', 'Gậy golf nữ', 7, 7, 50, 1500000),
+('Dễ dàng sử dụng, nhỏ gọn', 'Dụng cụ thể thao', 'Máy chạy bộ điện', 7, 7, 30, 5000000),
+
+-- Cửa hàng 8: Beauty Corner
+('Chất liệu tự nhiên, dưỡng ẩm', 'Mỹ phẩm', 'Kem dưỡng da ban đêm', 8, 8, 100, 350000),
+('Sản phẩm chống lão hóa', 'Mỹ phẩm', 'Serum Vitamin C', 8, 8, 80, 550000),
+('Bảng màu phong phú, lâu trôi', 'Mỹ phẩm', 'Son môi matte', 8, 8, 120, 200000),
+('Chống nắng cao, bảo vệ da', 'Mỹ phẩm', 'Kem chống nắng SPF 50', 8, 8, 150, 250000),
+('Làm sạch sâu, không gây khô da', 'Mỹ phẩm', 'Sữa rửa mặt dành cho da nhạy cảm', 8, 8, 90, 180000),
+
+-- Cửa hàng 9: Office & More
+('Dễ sử dụng, bền bỉ', 'Văn phòng phẩm', 'Bút bi gel', 9, 9, 200, 10000),
+('Giúp làm việc nhanh chóng', 'Văn phòng phẩm', 'Bút marker', 9, 9, 150, 20000),
+('Kích thước chuẩn, dễ sử dụng', 'Văn phòng phẩm', 'Giấy A4', 9, 9, 500, 50000),
+('Chất liệu bền, chịu lực tốt', 'Văn phòng phẩm', 'Bìa hồ sơ', 9, 9, 120, 25000),
+('Tổ chức sắp xếp công việc hiệu quả', 'Văn phòng phẩm', 'Lịch bàn', 9, 9, 80, 70000),
+
+-- Cửa hàng 10: Travel Gear
+('Chất liệu chống thấm nước', 'Đồ dùng du lịch', 'Balo du lịch', 10, 10, 100, 600000),
+('Thiết kế chắc chắn, dễ mang theo', 'Đồ dùng du lịch', 'Vali kéo', 10, 10, 80, 1200000),
+('Kích thước nhỏ gọn, tiện lợi', 'Đồ dùng du lịch', 'Túi ngủ', 10, 10, 50, 350000),
+('Đặc biệt dành cho đi phượt', 'Đồ dùng du lịch', 'Lều cắm trại', 10, 10, 40, 900000),
+('Chất liệu bền, dễ lau chùi', 'Đồ dùng du lịch', 'Túi đựng đồ dùng cá nhân', 10, 10, 150, 250000);
+
+
 
 -- Dữ liệu mẫu cho bảng Giỏ hàng
 INSERT INTO GioHang (MaNguoiMua) VALUES
@@ -749,22 +841,40 @@ INSERT INTO Chua (MaGioHang, MaSanPham, SoLuong) VALUES
 -- Dữ liệu mẫu cho bảng Đơn hàng
 INSERT INTO DonHang (NgayDat, PTThanhToan, MaNguoiMua) VALUES
 ('2024-11-15', 'Chuyển khoản', '001062946357'),
+('2024-12-08', 'Chuyển khoản', '001062946357'),
 ('2024-11-10', 'Tiền mặt', '037962011863'),
-('2024-11-12', 'Chuyển khoản', '066200000274');
+('2024-11-10', 'Tiền mặt', '037962011863'),
+('2024-12-07', 'Chuyển khoản', '066200000274'),
+('2024-12-07', 'Tiền mặt', '066200000274'),
+('2024-12-06', 'Chuyển khoản', '012345678911'),
+('2024-12-08', 'Tiền mặt', '012345678911'),
+('2024-12-05', 'Chuyển khoản', '083204000946'),
+('2024-12-06', 'Chuyển khoản', '083204000946'),
+('2024-12-07', 'Chuyển khoản', '011167000556'),
+('2024-12-08', 'Chuyển khoản', '011167000556');
 
 -- Dữ liệu mẫu cho bảng Hóa đơn
 INSERT INTO HoaDon (ThoiGianTao, TongGiaTri, MaDonHang) VALUES
-('2024-11-15 08:08:08', 100000, 1),
-('2024-11-10 09:09:09', 200000, 2),
-('2024-11-12 10:10:10', 300000, 3);
+('2024-11-15 08:08:08', 1215000, 1),
+('2024-12-08 09:09:09', 1000000000, 2),
+('2024-11-10 10:10:10', 3200000, 3),
+('2024-11-10 10:10:10', 1135000, 4),
+('2024-12-07 10:10:10', 650000, 5),
+('2024-12-07 10:10:10', 85000, 6),
+('2024-12-06 10:10:10', 3350000, 7),
+('2024-12-08 10:10:10', 550000, 8),
+('2024-12-05 10:10:10', 45000, 9),
+('2024-12-06 10:10:10', 3900000, 10),
+('2024-12-07 10:10:10', 20000000, 11),
+('2024-12-08 10:10:10', 1000000, 12);
 
 -- Dữ liệu mẫu cho Thông tin thanh toán
 INSERT INTO ThongTinThanhToan (MaNguoiMua, Loai, SoTaiKhoan) VALUES
 ('001062946357', 'Ngân hàng', '012345678901'),
-('037962011863', 'Tiền mặt', ''),
-('066200000274', 'Ví điện tử', 'eWallet123'),
+('037962011863', 'Ngân hàng', '099977898821'),
+('066200000274', 'MoMo', 'eWallet123'),
 ('012345678911', 'MoMo', 'eWallet123'),
-('083204000946', 'Tiền mặt', ''),
+('083204000946', 'Ngân hàng', '999009912021'),
 ('011167000556', 'Ngân hàng', '987654321098');
 
 -- Dữ liệu mẫu cho Bài đánh giá
@@ -776,8 +886,8 @@ INSERT INTO BaiDanhGia (NgayTao, SoSao, NoiDung, MaNguoiMua) VALUES
 -- Dữ liệu mẫu cho Đánh giá
 INSERT INTO DanhGia (MaBai, MaSanPham, MaDonHang) VALUES
 (1, 1, 1),
-(2, 2, 2), 
-(3, 3, 3);
+(2, 5, 1), 
+(3, 6, 2);
 
 -- Dữ liệu mẫu cho phương thức vận chuyển
 INSERT INTO PhuongThucVanChuyen (Ten, MoTa) VALUES
@@ -787,36 +897,82 @@ INSERT INTO PhuongThucVanChuyen (Ten, MoTa) VALUES
 -- Dữ liệu mẫu cho Xuất hàng
 INSERT INTO XuatHang (MaSanPham, MaNguoiBan, MaVanChuyen) VALUES 
 (1, '083811234432', 1),
-(2, '083811234432', 2),
-(3, '083811234432', 1);
+(5, '083811234432', 1),
+(6, '032532297682', 2),
+(7, '032532297682', 2),
+(12, '038180000947', 1),
+(16, '001062946358', 2),
+(18, '001062946358', 2),
+(22, '001062946359', 1),
+(23, '001062946359', 1),
+(28, '001062946360', 2),
+(29, '001062946360', 2),
+(32, '001062946361', 2),
+(34, '001062946361', 2),
+(36, '001062946362', 1),
+(38, '001062946362', 1),
+(41, '001062946363', 2),
+(44, '001062946363', 2),
+(46, '001062946364', 1),
+(49, '001062946364', 1),
+(6, '083811234432', 1),
+(7, '083811234432', 1),
+(16, '001062946358', 2),
+(17, '001062946358', 2);
 
 -- Dữ liệu mẫu cho thông tin giao hàng
 INSERT INTO ThongTinGiaoHang (MaNguoiMua, TenNguoiNhan, SoDienThoai, Tinh) VALUES
 ('001062946357', 'Nguyễn Văn A', '0912345678', 'Thành phố Bình Dương'),
 ('037962011863', 'Nguyễn Thành Công', '0914723685', 'Thành phố Bến Tre'),
-('066200000274', 'Nguyễn Minh Vũ', '0934127856', 'Thành phố Hồ Chí Minh');
+('066200000274', 'Nguyễn Minh Vũ', '0934127856', 'Thành phố Hồ Chí Minh'),
+('011167000556', 'Giảng Thị Bà', '0918324657', 'Thành phố Hồ Chí Minh'),
+('012345678911', 'Tô Văn Huệ', '0912345687', 'Thành phố Hồ Chí Minh'),
+('083204000946', 'Nguyễn Trường Thịnh', '0838592692', 'Thành phố Hồ Chí Minh');
 
 -- Dữ liệu mẫu cho có
 INSERT INTO Co (MaDonHang, MaSanPham, SoLuong) VALUES
 (1, 1, 1),
-(2, 2, 2),
-(3, 3, 3);
+(1, 5, 2),
+(2, 6, 2),
+(2, 7, 3),
+(3, 12, 1),
+(4, 16, 1),
+(4, 18, 3),
+(5, 22, 1),
+(5, 23, 2),
+(6, 28, 1),
+(6, 29, 1),
+(7, 32, 1),
+(7, 34, 2),
+(8, 36, 1),
+(8, 38, 1),
+(9, 41, 2),
+(9, 44, 1),
+(10, 46, 2),
+(10, 49, 3),
+(11, 6, 1),
+(11, 7, 1),
+(12, 16, 1),
+(12, 17, 1);
 
 -- Dữ liệu mẫu cho chương trình khuyến mãi
 INSERT INTO ChuongTrinhKhuyenMai (Ten, ThoiGianBD, ThoiGianKT, TyLeGiam, SoLuong) VALUES
 ('FlaseSale 10-10', '2024-10-10 00:00:00', '2024-10-11 00:00:00', 0.3, 50),
-('FlaseSale 11-11', '2024-11-11 00:00:00', '2024-11-12 00:00:00', 0.4, 100),
+('FlaseSale 11-11', '2024-11-11 00:00:00', '2024-11-12 00:00:00', 0.1, 100),
 ('FlaseSale 12-12', '2024-12-12 00:00:00', '2024-12-13 00:00:00', 0.5, 150);
 
 -- Dữ liệu mẫu cho đặt hàng
 INSERT INTO DatHang (MaDonHang, MaVanChuyen, MaNguoiMua, PhiVanChuyen) VALUES 
-(1, 1, '001062946357', 50),
-(2, 2, '037962011863', 0),
-(3, 1, '066200000274', 67);
+(1, 1, '001062946357', 15000),
+(2, 2, '066200000274', 15000),
+(3, 2, '037962011863', 15000),
+(4, 2, '011167000556', 15000),
+(5, 1, '012345678911', 15000),
+(6, 1, '083204000946', 15000);
 
 -- Dữ liệu mẫu cho giảm giá
 INSERT INTO GiamGia (MaDonHang, MaKM, TongGTDon) VALUES 
-(1, 2, 50000);
+(1, 2, 1350000);
 
 -- Dữ liệu mẫu cho sử dụng
 INSERT INTO SuDung (MaKM, MaNguoiMua) VALUES 
