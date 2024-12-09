@@ -12,6 +12,19 @@ const themSanPham = (p_MoTa, p_Loai, p_TenSanPham, p_MaDanhMuc, p_MaCuaHang, p_S
   });
 };
 
+const getAllProducts = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'CALL LayDanhSachSanPham()';
+    db.query(sql, (err, result) => {
+      if (err) {
+        reject(err); 
+      }
+      resolve(result[0]); 
+    });
+  });
+};
+
 module.exports = {
-  themSanPham
+  themSanPham,
+  getAllProducts
 };

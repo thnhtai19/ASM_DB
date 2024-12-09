@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/ordercontroller');
+const  authenticateToken  = require('../helper/authMiddleware');
 
-router.get('/', orderController.getOrdersByBuyerId);
+router.get('/',authenticateToken,orderController.getOrdersByBuyerId);
 
-router.get('/statistics', orderController.getOrderStatisticsByDate);
+router.get('/statistics', authenticateToken, orderController.getOrderStatisticsByDate);
 
 
 

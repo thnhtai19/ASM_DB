@@ -1,7 +1,7 @@
 const db = require('../models/db'); 
 
 const getOrdersByBuyerId = (req, res) => {
-    const { MaNguoiMua } = req.body; 
+    const { MaNguoiMua } = req.body;
     if (!MaNguoiMua) {
         return res.status(400).json({ error: 'Mã người mua là bắt buộc.' });
     }
@@ -13,9 +13,9 @@ const getOrdersByBuyerId = (req, res) => {
         }
         return res.status(200).json({
             message: 'Truy xuất đơn hàng thành công.',
-            data: result[0] 
+            data: result[0]
         });
-    });
+    });  
 };
 
 const getOrderStatisticsByDate = (req, res) => {

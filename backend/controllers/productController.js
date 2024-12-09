@@ -55,8 +55,19 @@ const deleteProduct = (req, res) => {
 };
 
 
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await productModel.getAllProducts(); 
+    res.status(200).json({ message: 'Lấy danh sách sản phẩm thành công.', data: products });
+  } catch (err) {
+    console.error('Lỗi khi lấy danh sách sản phẩm:', err);
+    res.status(500).json({ error: 'Lỗi khi lấy danh sách sản phẩm.' });
+  }
+};
+
 module.exports = {
     addProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllProducts
 };
