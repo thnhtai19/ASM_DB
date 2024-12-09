@@ -496,6 +496,14 @@ END //
 
 DELIMITER ;
 
+-- THÊM THỦ TỤC LẤY DANH SÁCH SẢN PHẦM Ở 1.2.1
+DELIMITER $$
+CREATE PROCEDURE LayDanhSachSanPham()
+BEGIN
+    SELECT * FROM SanPham; 
+END $$
+
+DELIMITER ;
 
 
 -- ***** Kết thúc 1.2.1 ***** ---
