@@ -9,6 +9,7 @@ router.patch('/update', productController.updateProduct);
 
 router.delete('/delete', productController.deleteProduct);
 
+router.get('/list', productController.getAllProducts);
 
 
 
