@@ -1,16 +1,17 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
-
+const cookieParser = require('cookie-parser');
+dotenv.config();
 
 const app = express();
 
 
-
+app.use(cookieParser()); 
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
