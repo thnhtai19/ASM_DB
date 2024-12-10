@@ -571,6 +571,36 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS hienThiHoaDon;
+DELIMITER //
+BEGIN
+    SELECT 
+        donhang.MaDonHang, 
+        nguoidung.HoTen AS TenNguoiMua,  
+        hoadon.TongGiaTri AS tienHang, 
+        COALESCE(dathang.PhiVanChuyen, 0) AS PhiVanChuyen,  
+        hoadon.TongGiaTri + COALESCE(dathang.PhiVanChuyen, 0) AS tongGTDon,
+        donhang.NgayDat,
+        donhang.PTThanhToan,
+        donhang.TTThanhToan,
+        donhang.TTDonHang
+      
+    FROM 
+        donhang 
+    JOIN 
+        nguoidung ON donhang.MaNguoiMua = nguoidung.CCCD  
+    JOIN 
+        hoadon ON hoadon.MaDonHang = donhang.MaDonHang
+    JOIN
+        co ON co.MaDonHang = donhang.MaDonHang
+    JOIN
+        sanpham ON sanpham.MaSanPham = co.MaSanPham
+    LEFT JOIN 
+        dathang ON dathang.MaDonHang = donhang.MaDonHang
+    GROUP BY
+        donhang.MaDonHang, hoadon.TongGiaTri, dathang.PhiVanChuyen, donhang.NgayDat, nguoidung.HoTen;
+END
+DELIMITER ;
 -- ***** Kết thúc 1.2.3 ***** ---
 
 

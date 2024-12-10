@@ -35,6 +35,7 @@ const logoutAdmin = (req, res) => {
     res.clearCookie('token'); 
     res.status(200).json({ message: 'Đăng xuất thành công' });
 };
+
 const getAllSellersWithProductDetails = (req, res) => {
     const query = `
         SELECT 
