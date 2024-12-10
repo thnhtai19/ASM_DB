@@ -3,7 +3,7 @@ const router = express.Router();
 const adminController = require('../controllers/adminController');
 const authenticateToken = require('../helper/authMiddleware');
 
-router.get('/',authenticateToken, adminController.getNumberProductSoldbyId);
+router.get('/',authenticateToken, adminController.getAllSellersWithProductDetails);
 
 router.get('/rating',authenticateToken, adminController.getRating);
 
