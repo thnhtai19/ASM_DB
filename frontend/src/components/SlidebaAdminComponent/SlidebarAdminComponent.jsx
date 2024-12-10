@@ -20,7 +20,7 @@ const SlidebarComponent = ({ curentpage }) => {
         <WrapperContainer>
             <div>
                 <div className='wrap-logo'>
-                    <div className='wrap-logo-container' onClick={() => handleRedirect("admin/home")}>
+                    <div className='wrap-logo-container'>
                         <img src={logocnpm} alt='logo' width="40px" />
                         <div className='brand-name'>BK ADMIN</div>
                     </div>

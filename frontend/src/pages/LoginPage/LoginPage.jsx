@@ -21,6 +21,9 @@ const LoginPage = () => {
       const response = await axios.post(`${apiUrl}admin/login`, {
         email: username,
         matkhau: password
+      },
+      {
+        withCredentials: true,
       });
 
       if(response.data.message === 'Admin đăng nhập thành công'){

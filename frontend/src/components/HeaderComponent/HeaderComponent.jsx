@@ -21,7 +21,9 @@ const HeaderComponent = ({ isOpen, setIsOpen }) => {
 
   const handleLogout = async () => {
     try {
-        await axios.post(apiUrl + 'admin/logout');
+        await axios.post(apiUrl + 'admin/logout',{}, {
+          withCredentials: true,
+        });
         sessionStorage.clear();
         window.location.href = '/';
     } catch (error) {
