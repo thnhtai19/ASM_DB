@@ -35,34 +35,55 @@ const logoutAdmin = (req, res) => {
     res.clearCookie('token'); 
     res.status(200).json({ message: 'Đăng xuất thành công' });
 };
-
-const  getNumberProductSoldbyId = (req, res) => {
-    const { MaNguoiBan } = req.body;
-    if (!MaNguoiBan) {
-        return res.status(400).json({ message: 'Mã người bán không được để trống' });
-    }
-    const query1 = 'SELECT TinhSoLuongSanPhamDaBan(?) AS SoLuongDaBan';
-    db.execute(query1, [MaNguoiBan], (err, results1) => {
-        if (err) {
-            console.error('Lỗi khi gọi hàm tính số lượng sản phẩm: ', err);
-            return res.status(500).json({ message: 'Lỗi khi truy vấn cơ sở dữ liệu' });
-        }
-        const SoLuongDaBan = results1[0]?.SoLuongDaBan;
-        if (SoLuongDaBan !== null && SoLuongDaBan > 0) {
-            const query2 = 'CALL LayChiTietSanPhamDaBan(?)';
-            db.execute(query2, [MaNguoiBan], (err, results2) => {
+const getAllSellersWithProductDetails = (req, res) => {
+    const query = `
+        SELECT 
+            nb.MaNguoiBan,
+            nd.HoTen AS TenNguoiBan,
+            ch.TenCuaHang,
+            TinhSoLuongSanPhamDaBan(nb.MaNguoiBan) AS SoLuongSanPhamDaBan
+            FROM NguoiBan nb
+            JOIN NguoiDung nd ON nb.MaNguoiBan = nd.CCCD
+            LEFT JOIN CuaHang ch ON nb.MaNguoiBan = ch.MaNguoiBan;
+            `;
+            
+            db.query(query, (err, sellers) => {
                 if (err) {
-                    console.error('Lỗi khi gọi thủ tục lấy chi tiết sản phẩm: ', err);
-                    return res.status(500).json({ message: 'Lỗi khi truy vấn cơ sở dữ liệu' });
-                }
-                const productDetails = results2[0];
-                return res.json({ SoLuongDaBan, productDetails });
-            });
-        } else {
-            return res.json({ message: 'Không có sản phẩm hoặc không tồn tại người bán.' });
+                    console.error('Lỗi khi truy vấn danh sách người bán:', err);
+            return res.status(500).json({ message: 'Lỗi hệ thống khi truy vấn cơ sở dữ liệu' });
         }
+        
+        const sellerDetailsPromises = sellers.map((seller) => {
+            return new Promise((resolve, reject) => {
+                const procedureQuery = 'CALL LayChiTietSanPhamDaBan(?)';
+                db.query(procedureQuery, [seller.MaNguoiBan], (err, productDetails) => {
+                    if (err) {
+                        console.error(`Lỗi khi lấy chi tiết sản phẩm cho người bán ${seller.MaNguoiBan}:`, err);
+                        return reject(err);
+                    }
+                    resolve({
+                        ...seller,  
+                        Chi_tiet_san_pham_da_ban: productDetails[0], 
+                    });
+                });
+            });
+        });
+
+        
+        Promise.all(sellerDetailsPromises)
+            .then((results) => {
+                return res.status(200).json({
+                    danh_sach_nguoi_ban: results,
+                });
+            })
+            .catch((error) => {
+                console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
+                return res.status(500).json({ message: 'Lỗi khi lấy chi tiết sản phẩm đã bán' });
+            });
     });
 };
+
+
 
 
 const getRating = (req, res) => {
@@ -104,9 +125,62 @@ const getAllStoreRatings = (req, res) => {
 
 
 module.exports = {
-    getNumberProductSoldbyId,
+    //getNumberProductSoldbyId,
+    getAllSellersWithProductDetails,
     getRating,
     loginAdmin,
     logoutAdmin,
     getAllStoreRatings
 };
+
+
+// const  getNumberProductSoldbyId = (req, res) => {
+//     const { MaNguoiBan } = req.body;
+//     if (!MaNguoiBan) {
+//         return res.status(400).json({ message: 'Mã người bán không được để trống' });
+//     }
+//     const query1 = 'SELECT TinhSoLuongSanPhamDaBan(?) AS SoLuongDaBan';
+//     db.execute(query1, [MaNguoiBan], (err, results1) => {
+//         if (err) {
+//             console.error('Lỗi khi gọi hàm tính số lượng sản phẩm: ', err);
+//             return res.status(500).json({ message: 'Lỗi khi truy vấn cơ sở dữ liệu' });
+//         }
+//         const SoLuongDaBan = results1[0]?.SoLuongDaBan;
+//         if (SoLuongDaBan !== null && SoLuongDaBan > 0) {
+//             const query2 = 'CALL LayChiTietSanPhamDaBan(?)';
+//             db.execute(query2, [MaNguoiBan], (err, results2) => {
+//                 if (err) {
+//                     console.error('Lỗi khi gọi thủ tục lấy chi tiết sản phẩm: ', err);
+//                     return res.status(500).json({ message: 'Lỗi khi truy vấn cơ sở dữ liệu' });
+//                 }
+//                 const productDetails = results2[0];
+//                 return res.json({ SoLuongDaBan, productDetails });
+//             });
+//         } else {
+//             return res.json({ message: 'Không có sản phẩm hoặc không tồn tại người bán.' });
+//         }
+//     });
+// // };
+// const getAllSellersWithProductDetails = (req, res) => {
+//     const query = `
+//         SELECT
+//             nb.MaNguoiBan,
+//             nd.HoTen AS TenNguoiBan,
+//             ch.TenCuaHang,
+//             TinhSoLuongSanPhamDaBan(nb.MaNguoiBan) AS SoLuongSanPhamDaBan
+//         FROM NguoiBan nb
+//         JOIN NguoiDung nd ON nb.MaNguoiBan = nd.CCCD
+//         LEFT JOIN CuaHang ch ON nb.MaNguoiBan = ch.MaNguoiBan;
+//     `;
+
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Lỗi khi truy vấn danh sách người bán:', err);
+//             return res.status(500).json({ message: 'Lỗi hệ thống khi truy vấn cơ sở dữ liệu' });
+//         }
+
+//         return res.status(200).json({
+//             danh_sach_nguoi_ban: results
+//         });
+//     });
+// };
