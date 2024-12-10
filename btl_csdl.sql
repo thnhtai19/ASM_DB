@@ -551,20 +551,25 @@ DELIMITER ;
 
 -- với từng sản phẩm, thống kê tổng số lượng đơn hàng, tổng giá trị đơn hàng trong ngày
 --  đối với từng sản phẩm trong một ngày bất kỳ
-
 DROP PROCEDURE IF EXISTS SoNguoiMua;
 DELIMITER //
-CREATE PROCEDURE SoNguoiMua (IN ngay timestamp)
+CREATE PROCEDURE SoNguoiMua (IN ngay TIMESTAMP)
 BEGIN
-	SELECT TenSanPham, COUNT(donhang.MaDonHang) AS SoDonHang, COUNT(co.SoLuong) AS TongSoLuong, SUM(TongGiaTri) 
-			AS TongGiaTri
-    FROM sanpham, donhang, hoadon, co
-    WHERE donhang.NgayDat = ngay AND donhang.MaDonHang = co.MaDonHang AND co.MaSanPham = sanpham.MaSanPham
-		AND hoadon.MaDonHang = donhang.MaDonHang
-	GROUP BY TenSanPham;
-END; //
+    SELECT 
+        sanpham.MaSanPham,   
+        sanpham.TenSanPham, 
+        COUNT(donhang.MaDonHang) AS SoDonHang, 
+        COUNT(co.SoLuong) AS TongSoLuong, 
+        SUM(TongGiaTri) AS TongGiaTri
+    FROM sanpham, donhang, hoadon, co, cuahang
+    WHERE donhang.NgayDat = ngay 
+        AND donhang.MaDonHang = co.MaDonHang 
+        AND co.MaSanPham = sanpham.MaSanPham
+        AND hoadon.MaDonHang = donhang.MaDonHang 
+        AND cuahang.MaCuaHang = sanpham.MaCuaHang
+    GROUP BY sanpham.MaSanPham, sanpham.TenSanPham;
+END //
 DELIMITER ;
-
 
 -- ***** Kết thúc 1.2.3 ***** ---
 
@@ -572,9 +577,6 @@ DELIMITER ;
 
 
 -- ***** Bắt đầu 1.2.4 ***** ---
-
---Tính số lượng sản phẩm đã bán của người bán dựa vào mã.
-
 DELIMITER //
 CREATE FUNCTION TinhSoLuongSanPhamDaBan(MaNguoiBan VARCHAR(12))
 RETURNS INT
@@ -602,8 +604,6 @@ BEGIN
     RETURN SoLuongDaBan;
 END //
 DELIMITER ;
-
-
 
 
 -- tính số sao trung bình của 1 cửa hàng
@@ -642,6 +642,34 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+
+DELIMITER //
+CREATE PROCEDURE LayDanhSachCuaHangVaSoSao()
+BEGIN
+    SELECT 
+        c.MaCuaHang,
+        c.TenCuaHang,
+        COALESCE(CAST(TinhDiemTrungBinhCuaHang(c.MaCuaHang) AS CHAR), 'Chưa có đánh giá') AS SoSaoTrungBinh,
+        nd.HoTen AS TenNguoiBan
+    FROM CuaHang c
+    JOIN NguoiBan nb ON c.MaNguoiBan = nb.MaNguoiBan
+    JOIN NguoiDung nd ON nb.MaNguoiBan = nd.CCCD;
+END //
+DELIMITER ;
+
+
+--THỦ TỤC LẤY CHI TIET SẢN PHẨM ĐÃ BÁN
+DELIMITER //
+CREATE PROCEDURE LayChiTietSanPhamDaBan(MaNguoiBan VARCHAR(12))
+BEGIN
+    SELECT sp.TenSanPham, c.SoLuong, sp.Gia, ch.TenCuaHang
+    FROM Chua c
+    JOIN SanPham sp ON c.MaSanPham = sp.MaSanPham
+    JOIN CuaHang ch ON sp.MaCuaHang = ch.MaCuaHang
+    WHERE ch.MaNguoiBan = MaNguoiBan;
+END //
+DELIMITER ;
 
 
 
