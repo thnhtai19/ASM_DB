@@ -8,14 +8,22 @@ const LoginPage = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const isLoggedIn = sessionStorage.getItem("isLogin") === "true";
+
+  if(isLoggedIn){
+    window.location.href = '/admin/product'
+  }
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}admin/login`, {
-        maAdmin: username,
+        email: username,
+        matkhau: password
       });
 
-      if(response.data.message === 'Đăng nhập thành công'){
+      if(response.data.message === 'Admin đăng nhập thành công'){
         message.success('Đăng nhập thành công!');
         sessionStorage.setItem("isLogin", true);
         setTimeout(() => {
@@ -24,8 +32,8 @@ const LoginPage = () => {
       }else{
         message.error('Sai tài khoản hoặc mật khẩu!');
       }
-    } catch (error) {
-      message.error('Đã xảy ra lỗi khi đăng nhập!');
+    } catch (err) {
+        message.error(err.response.data.error)
     }
   };
 

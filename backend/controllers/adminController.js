@@ -1,3 +1,4 @@
+const CryptoJS = require('crypto-js');
 
 const db = require('../models/db'); 
 const jwt = require('jsonwebtoken');
@@ -9,8 +10,9 @@ const loginAdmin = (req, res) => {
     if (!email || !matkhau) {
         return res.status(400).json({ error: 'Email và mật khẩu là bắt buộc' });
     }
+    const hash_pw = CryptoJS.SHA256(matkhau).toString(CryptoJS.enc.Hex);
     const query = 'SELECT * FROM NguoiDung WHERE Email = ? AND MatKhau = ?';
-    db.query(query, [email, matkhau], (err, results) => {
+    db.query(query, [email, hash_pw], (err, results) => {
         if (err) {
             console.error('Lỗi khi đăng nhập:', err);
             return res.status(500).json({ error: 'Lỗi hệ thống' });
