@@ -114,9 +114,9 @@ const getAllStoreRatings = (req, res) => {
             console.error('Lỗi khi gọi thủ tục: ', err);
             return res.status(500).json({ message: 'Lỗi khi truy vấn cơ sở dữ liệu' });
         }
-        const stores = results[0];
-        if (stores.length > 0) {
-            res.json({ stores });
+        const Danh_sach_cua_hang = results[0];
+        if (Danh_sach_cua_hang.length > 0) {
+            res.json({ Danh_sach_cua_hang });
         } else {
             res.json({ message: 'Không có cửa hàng nào trong cơ sở dữ liệu.' });
         }
