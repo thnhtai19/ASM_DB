@@ -571,8 +571,11 @@ BEGIN
 END //
 DELIMITER ;
 
+
 DROP PROCEDURE IF EXISTS hienThiHoaDon;
 DELIMITER //
+
+CREATE PROCEDURE hienThiHoaDon()
 BEGIN
     SELECT 
         donhang.MaDonHang, 
@@ -598,9 +601,12 @@ BEGIN
     LEFT JOIN 
         dathang ON dathang.MaDonHang = donhang.MaDonHang
     GROUP BY
-        donhang.MaDonHang, hoadon.TongGiaTri, dathang.PhiVanChuyen, donhang.NgayDat, nguoidung.HoTen;
-END
+        donhang.MaDonHang, nguoidung.HoTen, hoadon.TongGiaTri, dathang.PhiVanChuyen, 
+        donhang.NgayDat, donhang.PTThanhToan, donhang.TTThanhToan, donhang.TTDonHang;
+END //
+
 DELIMITER ;
+
 -- ***** Kết thúc 1.2.3 ***** ---
 
 
