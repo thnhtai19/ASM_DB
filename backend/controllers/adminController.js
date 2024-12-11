@@ -43,17 +43,19 @@ const getAllSellersWithProductDetails = (req, res) => {
             nd.HoTen AS TenNguoiBan,
             ch.TenCuaHang,
             TinhSoLuongSanPhamDaBan(nb.MaNguoiBan) AS SoLuongSanPhamDaBan
-            FROM NguoiBan nb
-            JOIN NguoiDung nd ON nb.MaNguoiBan = nd.CCCD
-            LEFT JOIN CuaHang ch ON nb.MaNguoiBan = ch.MaNguoiBan;
-            `;
-            
-            db.query(query, (err, sellers) => {
-                if (err) {
-                    console.error('Lỗi khi truy vấn danh sách người bán:', err);
+        FROM 
+            NguoiBan nb
+        JOIN 
+            NguoiDung nd ON nb.MaNguoiBan = nd.CCCD
+        LEFT JOIN 
+            CuaHang ch ON nb.MaNguoiBan = ch.MaNguoiBan;
+    `;
+
+    db.query(query, (err, sellers) => {
+        if (err) {
+            console.error('Lỗi khi truy vấn danh sách người bán:', err);
             return res.status(500).json({ message: 'Lỗi hệ thống khi truy vấn cơ sở dữ liệu' });
         }
-        
         const sellerDetailsPromises = sellers.map((seller) => {
             return new Promise((resolve, reject) => {
                 const procedureQuery = 'CALL LayChiTietSanPhamDaBan(?)';
@@ -62,15 +64,24 @@ const getAllSellersWithProductDetails = (req, res) => {
                         console.error(`Lỗi khi lấy chi tiết sản phẩm cho người bán ${seller.MaNguoiBan}:`, err);
                         return reject(err);
                     }
+                    const mergedProducts = Object.values(
+                        productDetails[0].reduce((acc, product) => {
+                            if (acc[product.TenSanPham]) {
+                                acc[product.TenSanPham].SoLuong += product.SoLuong;
+                            } else {
+                                acc[product.TenSanPham] = { ...product };
+                            }
+                            return acc;
+                        }, {})
+                    );
                     resolve({
-                        ...seller,  
-                        Chi_tiet_san_pham_da_ban: productDetails[0], 
+                        ...seller,
+                        Chi_tiet_san_pham_da_ban: mergedProducts,
                     });
                 });
             });
         });
 
-        
         Promise.all(sellerDetailsPromises)
             .then((results) => {
                 return res.status(200).json({
@@ -126,7 +137,6 @@ const getAllStoreRatings = (req, res) => {
 
 
 module.exports = {
-    //getNumberProductSoldbyId,
     getAllSellersWithProductDetails,
     getRating,
     loginAdmin,

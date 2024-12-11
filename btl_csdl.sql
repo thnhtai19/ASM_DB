@@ -623,7 +623,7 @@ BEGIN
     DECLARE done INT DEFAULT 0;
     DECLARE cur CURSOR FOR 
         SELECT c.SoLuong
-        FROM Chua c
+        FROM Co c
         JOIN SanPham sp ON c.MaSanPham = sp.MaSanPham
         JOIN CuaHang ch ON sp.MaCuaHang = ch.MaCuaHang
         WHERE ch.MaNguoiBan = MaNguoiBan;
@@ -700,7 +700,7 @@ DELIMITER //
 CREATE PROCEDURE LayChiTietSanPhamDaBan(MaNguoiBan VARCHAR(12))
 BEGIN
     SELECT sp.TenSanPham, c.SoLuong, sp.Gia, ch.TenCuaHang
-    FROM Chua c
+    FROM Co c
     JOIN SanPham sp ON c.MaSanPham = sp.MaSanPham
     JOIN CuaHang ch ON sp.MaCuaHang = ch.MaCuaHang
     WHERE ch.MaNguoiBan = MaNguoiBan;
