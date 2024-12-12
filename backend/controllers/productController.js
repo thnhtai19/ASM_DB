@@ -39,31 +39,50 @@ const addProduct = async (req, res) => {
 };
 
 
+// const updateProduct = (req, res) => {
+//     const {MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+//     if (!MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || SoLuong == null || Gia == null) {
+//         //if (!MaSanPham) return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
+//         //if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
+//         //if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
+//         if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
+//         //if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
+//         //if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
+//         if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
+//         if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
+//     }
+    
+//     const sql = 'CALL SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?)';
+//     db.query(sql, [MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia], (err, result) => {
+//         if (err) {
+//             console.error('Lỗi khi cập nhật sản phẩm:', err);
+//             if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm không tồn tại')) {
+//                 return res.status(404).json({ error: 'Sản phẩm không tồn tại.' });
+//             }
+//             if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã danh mục không tồn tại')) {
+//                 return res.status(400).json({ error: 'Mã danh mục không tồn tại.' });
+//             }
+//             if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
+//                 return res.status(400).json({ error: 'Mã cửa hàng không tồn tại.' });
+//             }
+//             return res.status(500).json({ error: 'Lỗi khi cập nhật sản phẩm.' });
+//         }
+//         return res.status(200).json({ message: 'Cập nhật sản phẩm thành công.', data: result });
+//     });
+// };
 const updateProduct = (req, res) => {
     const { MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
-    if (!MaSanPham || !MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || SoLuong == null || Gia == null) {
-        if (!MaSanPham) return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
-        if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
-        if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
-        if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
-        if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
-        if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
-        if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
-        if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
+
+    if (!MaSanPham) {
+        return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
     }
-    
+
+
     const sql = 'CALL SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia], (err, result) => {
         if (err) {
-            console.error('Lỗi khi cập nhật sản phẩm:', err);
-            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm không tồn tại')) {
-                return res.status(404).json({ error: 'Sản phẩm không tồn tại.' });
-            }
-            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã danh mục không tồn tại')) {
-                return res.status(400).json({ error: 'Mã danh mục không tồn tại.' });
-            }
-            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
-                return res.status(400).json({ error: 'Mã cửa hàng không tồn tại.' });
+            if (err.code === 'ER_SIGNAL_EXCEPTION') {
+                return res.status(400).json({ error: err.sqlMessage });
             }
             return res.status(500).json({ error: 'Lỗi khi cập nhật sản phẩm.' });
         }
