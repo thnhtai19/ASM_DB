@@ -391,22 +391,32 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Tên sản phẩm không được để trống.';
     END IF;
-
     IF p_SoLuong < 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Số lượng sản phẩm không được nhỏ hơn 0.';
     END IF;
-
     IF p_Gia <= 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Giá sản phẩm phải lớn hơn 0.';
     END IF;
-
+    IF NOT EXISTS (SELECT 1 FROM DanhMuc WHERE MaDanhMuc = p_MaDanhMuc) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Mã danh mục không tồn tại.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM CuaHang WHERE MaCuaHang = p_MaCuaHang) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Mã cửa hàng không tồn tại.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM SanPham WHERE TenSanPham = p_TenSanPham) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Sản phẩm đã tồn tại.';
+    END IF;
     INSERT INTO SanPham (MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia)
     VALUES (p_MoTa, p_Loai, p_TenSanPham, p_MaDanhMuc, p_MaCuaHang, p_SoLuong, p_Gia);
-END //
 
+END //
 DELIMITER ;
+
 
 -- Thủ tục cập nhật dữ liệu vào bảng SanPham
 DELIMITER //

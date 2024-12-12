@@ -2,35 +2,77 @@ const productModel = require('../models/product');
 const db = require('../models/db');
 
 const addProduct = async (req, res) => {
-  const { MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
-
-  if (!MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || !SoLuong || !Gia) {
-    return res.status(400).send('Thiếu thông tin sản phẩm.');
-  }
-  try {
-    const result = await productModel.themSanPham(MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia);
-    res.status(200).send(result); 
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Có lỗi xảy ra khi thêm sản phẩm.');
-  }
+    const { MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+    if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
+    if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
+    if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
+    if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
+    if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
+    if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
+    if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
+    
+    try {
+        const result = await productModel.themSanPham(MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia);
+        res.status(200).json({
+            message: 'Thêm sản phẩm thành công.',
+      data: result,
+    });
+} catch (err) {
+    console.error('Lỗi khi thêm sản phẩm:', err);
+    if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm đã tồn tại')) {
+        return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
+    }
+    if (err.code === 'ER_SIGNAL_EXCEPTION') {
+        if (err.sqlMessage.includes('Mã danh mục không tồn tại')) {
+            return res.status(400).json({ message: 'Mã danh mục không tồn tại.' });
+        } else if (err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
+            return res.status(400).json({ message: 'Mã cửa hàng không tồn tại.' });
+        }
+    }
+    if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
+    } else if (err.code === 'ER_NO_REFERENCED_ROW') {
+        return res.status(400).json({ message: 'Mã danh mục hoặc mã cửa hàng không tồn tại.' });
+    }
+    res.status(500).json({ message: 'Có lỗi xảy ra khi thêm sản phẩm.' });
+}
 };
+
 
 const updateProduct = (req, res) => {
     const { MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
-
-    if (!MaSanPham || !TenSanPham || !SoLuong || !Gia) {
-        return res.status(400).json({ error: 'Thiếu thông tin.' });
+    if (!MaSanPham || !MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || SoLuong == null || Gia == null) {
+        if (!MaSanPham) return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
+        if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
+        if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
+        if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
+        if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
+        if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
+        if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
+        if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
     }
+    
     const sql = 'CALL SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia], (err, result) => {
         if (err) {
             console.error('Lỗi khi cập nhật sản phẩm:', err);
+            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm không tồn tại')) {
+                return res.status(404).json({ error: 'Sản phẩm không tồn tại.' });
+            }
+            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã danh mục không tồn tại')) {
+                return res.status(400).json({ error: 'Mã danh mục không tồn tại.' });
+            }
+            if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
+                return res.status(400).json({ error: 'Mã cửa hàng không tồn tại.' });
+            }
             return res.status(500).json({ error: 'Lỗi khi cập nhật sản phẩm.' });
         }
         return res.status(200).json({ message: 'Cập nhật sản phẩm thành công.', data: result });
     });
 };
+
+
+
 
 const deleteProduct = (req, res) => {
     const { MaSanPham } = req.body; 
@@ -54,18 +96,48 @@ const deleteProduct = (req, res) => {
     });
 };
 
+// const updateProduct = (req, res) => {
+//     const { MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+    
+//     if (!MaSanPham || !TenSanPham || !SoLuong || !Gia) {
+//         return res.status(400).json({ error: 'Thiếu thông tin.' });
+//     }
+//     const sql = 'CALL SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?)';
+//     db.query(sql, [MaSanPham, MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia], (err, result) => {
+//         if (err) {
+//             console.error('Lỗi khi cập nhật sản phẩm:', err);
+//             return res.status(500).json({ error: 'Lỗi khi cập nhật sản phẩm.' });
+//         }
+//         return res.status(200).json({ message: 'Cập nhật sản phẩm thành công.', data: result });
+//     });
+// };
 
-// const getAllProducts = async (req, res) => {
-//   try {
-//     const products = await productModel.getAllProducts(); 
-//     res.status(200).json({ message: 'Lấy danh sách sản phẩm thành công.', data: products });
+// const addProduct = async (req, res) => {
+    //   const { MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+    
+    //   if (!MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || !SoLuong || !Gia) {
+        //     return res.status(400).send('Thiếu thông tin sản phẩm.');
+        //   }
+        //   try {
+            //     const result = await productModel.themSanPham(MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia);
+            //     res.status(200).send(result);
 //   } catch (err) {
-//     console.error('Lỗi khi lấy danh sách sản phẩm:', err);
-//     res.status(500).json({ error: 'Lỗi khi lấy danh sách sản phẩm.' });
+//     console.error(err);
+//     res.status(500).send('Có lỗi xảy ra khi thêm sản phẩm.');
 //   }
 // };
 
-const getAllProducts = (req, res) => {
+// const getAllProducts = async (req, res) => {
+    //   try {
+        //     const products = await productModel.getAllProducts(); 
+        //     res.status(200).json({ message: 'Lấy danh sách sản phẩm thành công.', data: products });
+        //   } catch (err) {
+            //     console.error('Lỗi khi lấy danh sách sản phẩm:', err);
+            //     res.status(500).json({ error: 'Lỗi khi lấy danh sách sản phẩm.' });
+            //   }
+            // };
+            
+            const getAllProducts = (req, res) => {
     const queryStores = 'SELECT MaCuaHang AS id, TenCuaHang AS Ten_Cua_Hang FROM CuaHang';
     const queryCategories = 'SELECT MaDanhMuc AS id, TenDanhMuc AS Ten_Danh_Muc FROM DanhMuc';
     const queryProducts = `

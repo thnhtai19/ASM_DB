@@ -7,7 +7,7 @@ const  authenticateToken  = require('../helper/authMiddleware');
 router.post('/add',authenticateToken, productController.addProduct);
 
 
-router.patch('/update',authenticateToken, productController.updateProduct);
+router.put('/update',authenticateToken, productController.updateProduct);
 
 router.delete('/delete',authenticateToken, productController.deleteProduct);
 
