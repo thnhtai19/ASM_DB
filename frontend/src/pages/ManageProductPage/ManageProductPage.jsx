@@ -162,7 +162,6 @@ const ManageProductPage = () => {
         message.error("Đã xảy ra lỗi khi thêm sản phẩm.");
       }
     } catch (error) {
-      console.error("Error adding product:", error);
       message.error("Vui lòng kiểm tra lại thông tin và thử lại.");
     }
   };

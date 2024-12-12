@@ -66,16 +66,11 @@ const ManageOrder = () => {
         const formValues = formRef.current.getFieldsValue();
 
         try {
-          const res = await axios.post(`${apiUrl}product/update`,
+          const res = await axios.post(`${apiUrl}order/update`,
             {
-              'MaSanPham': currentItem.id,
-              'MoTa': formValues.description,
-              'Loai': formValues.loai,
-              'TenSanPham': formValues.nameproduct,
-              'MaDanhMuc': formValues.category,
-              'MaCuaHang': formValues.store,
-              'SoLuong': formValues.amount,
-              'Gia': formValues.price
+              'MaDonHang': currentItem.MaDonHang,
+              'TTThanhToan': formValues.trangthaithanhtoan,
+              'TTDonHang': formValues.trangthaidonhang,
             },
             {
               withCredentials: true,
@@ -86,17 +81,12 @@ const ManageOrder = () => {
 
             set_danh_sach_don_hang((prev) =>
               prev.map((item) =>
-                item.id === currentItem.id
+                item.MaDonHang === currentItem.MaDonHang
                   ? {
                     ...item,
                     ...formValues,
-                    Mo_Ta: formValues.description,
-                    loai: formValues.loai,
-                    Ma_Danh_Muc: formValues.category,
-                    Ma_Cua_Hang: formValues.store,
-                    Ten_San_Pham: formValues.nameproduct,
-                    Gia: formValues.price,
-                    So_Luong: formValues.amount,
+                    TTThanhToan: formValues.TTThanhToan,
+                    TTDonHang: formValues.trangthaidonhang,
                   }
                   : item
               )
@@ -252,9 +242,9 @@ const ManageOrder = () => {
                 <Col span={12}>
                   <Form.Item label="Trạng thái thanh toán" name="trangthaidonhang" initialValue={currentItem.TTDonHang}>
                     <Select placeholder='Chọn trạng thái đơn hàng'>
-                      <Option value="Chưa thanh toán">Chưa giao hàng</Option>
-                      <Option value="Đã thanh toán">Đã giao hàng</Option>
-                      <Option value="Huỷ thanh toán">Huỷ giao hàng</Option>
+                      <Option value="Chưa giao hàng">Chưa giao hàng</Option>
+                      <Option value="Đã giao hàng">Đã giao hàng</Option>
+                      <Option value="Huỷ giao hàng">Huỷ giao hàng</Option>
                     </Select>
                   </Form.Item>
                 </Col>

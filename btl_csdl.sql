@@ -95,7 +95,7 @@ CREATE TABLE DonHang (
     NgayDat DATE NOT NULL,
     PTThanhToan VARCHAR(50) NOT NULL,
     TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán') DEFAULT 'Chưa thanh toán',
-    TTDonHang ENUM('Đã giao hàng', 'Chưa giao hàng') DEFAULT 'Chưa giao hàng',
+    TTDonHang ENUM('Đã giao hàng', 'Chưa giao hàng', 'Huỷ giao hàng') DEFAULT 'Chưa giao hàng',
     MaNguoiMua CHAR(12) NOT NULL,
     CONSTRAINT fk_DonHang_NguoiMua FOREIGN KEY (MaNguoiMua) REFERENCES NguoiMua(MaNguoiMua)
     ON UPDATE CASCADE
@@ -105,7 +105,7 @@ CREATE TABLE DonHang (
 CREATE TABLE HoaDon (
     MaHoaDon INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ThoiGianTao TIMESTAMP NOT NULL,
-    TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán') DEFAULT 'Chưa thanh toán',
+    TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán', 'Huỷ thanh toán') DEFAULT 'Chưa thanh toán',
     TongGiaTri DECIMAL(18, 2),
     MaDonHang INT NOT NULL,
     CONSTRAINT fk_HoaDon_DonHang FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang)

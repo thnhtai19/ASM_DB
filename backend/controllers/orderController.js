@@ -123,8 +123,8 @@ const updateOrderStatus = (req, res) => {
     if (!MaDonHang) {
         return res.status(400).json({ error: 'MaDonHang là bắt buộc.' });
     }
-    const validPaymentStatus = ["Đã thanh toán", "Chưa thanh toán"];
-    const validOrderStatus = ["Đã giao hàng", "Chưa giao hàng"];
+    const validPaymentStatus = ["Đã thanh toán", "Chưa thanh toán", "Huỷ thanh toán"];
+    const validOrderStatus = ["Đã giao hàng", "Chưa giao hàng", "Huỷ giao hàng"];
     if (TTThanhToan && !validPaymentStatus.includes(TTThanhToan)) {
         return res.status(400).json({
             error: `TTThanhToan phải là một trong các giá trị: ${validPaymentStatus.join(', ')}.`,
