@@ -7,6 +7,6 @@ router.get('/',authenticateToken,orderController.getAllBuyersAndOrders);
 
 router.get('/statistics', authenticateToken, orderController.getOrderStatisticsByDate);
 
-
+router.put('/update',authenticateToken,orderController.updateOrderStatus);
 
 module.exports = router;

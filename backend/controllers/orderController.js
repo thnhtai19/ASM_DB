@@ -117,9 +117,50 @@ const getOrderStatisticsByDate = (req, res) => {
 };
 
 
+const updateOrderStatus = (req, res) => {
+    const { MaDonHang, TTThanhToan, TTDonHang } = req.body;
+
+    if (!MaDonHang) {
+        return res.status(400).json({ error: 'MaDonHang là bắt buộc.' });
+    }
+    const validPaymentStatus = ["Đã thanh toán", "Chưa thanh toán"];
+    const validOrderStatus = ["Đã giao hàng", "Chưa giao hàng"];
+    if (TTThanhToan && !validPaymentStatus.includes(TTThanhToan)) {
+        return res.status(400).json({
+            error: `TTThanhToan phải là một trong các giá trị: ${validPaymentStatus.join(', ')}.`,
+        });
+    }
+    if (TTDonHang && !validOrderStatus.includes(TTDonHang)) {
+        return res.status(400).json({
+            error: `TTDonHang phải là một trong các giá trị: ${validOrderStatus.join(', ')}.`,
+        });
+    }
+    const sql = `
+        UPDATE donhang
+        SET 
+            TTThanhToan = COALESCE(?, TTThanhToan),
+            TTDonHang = COALESCE(?, TTDonHang)
+        WHERE MaDonHang = ?;
+    `;
+    db.query(sql, [TTThanhToan, TTDonHang, MaDonHang], (err, result) => {
+        if (err) {
+            console.error('Lỗi khi cập nhật trạng thái đơn hàng:', err);
+            return res.status(500).json({ error: 'Lỗi khi cập nhật trạng thái đơn hàng.' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Không tìm thấy đơn hàng với MaDonHang đã cho.' });
+        }
+        return res.status(200).json({
+            message: 'Cập nhật trạng thái đơn hàng thành công.',
+        });
+    });
+};
+
 
 
 module.exports = {
   getAllBuyersAndOrders,
-  getOrderStatisticsByDate
+  getOrderStatisticsByDate,
+  updateOrderStatus
 };
