@@ -35,6 +35,7 @@ const ManageProductPage = () => {
       }
     } catch (err) {
       if(err.status === 401){
+        sessionStorage.clear();
         window.location.href = '/'
       }
     } finally {

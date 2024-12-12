@@ -27,7 +27,7 @@ const loginAdmin = (req, res) => {
         const token = jwt.sign(
             { id: user.MaNguoiDung, role: "admin" },
             SECRET_KEY,
-            { expiresIn: '1h' }
+            { expiresIn: '5h' }
         );
         res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 });
         return res.status(200).json({ message: 'Admin đăng nhập thành công' });

@@ -35,12 +35,6 @@ const HeaderComponent = ({ isOpen, setIsOpen }) => {
 
   const menu = (
     <Menu style={{ width: '250px', maxHeight: '300px' }}>
-      <div style={{ marginLeft: '15px', padding: '10px 0' }}>
-        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-          Trần Thành Tài
-        </div>
-        <div style={{ fontSize: '11px', color: '#444' }}>tai.tranthanh@hcmut.edu.vn</div>
-      </div>
 
       <Menu.Item key="3">
         <div style={{ display: 'flex', gap: '10px' }} onClick={handleLogout}>

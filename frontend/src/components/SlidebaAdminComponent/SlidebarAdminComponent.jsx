@@ -2,8 +2,8 @@ import React from 'react';
 import { WrapperContainer } from './style';
 import logocnpm from '../../assets/logocnpm.png';
 import user from '../../assets/user.png';
-import home from '../../assets/dashboard.svg';
-import myacc from '../../assets/personal-information.svg';
+import ship from '../../assets/icons8-shipment-100.png';
+import rate from '../../assets/icons8-rate-100.png'
 import print from '../../assets/proxy.svg';
 import history from '../../assets/history-book.svg';
 import report from '../../assets/documents.png'
@@ -38,9 +38,17 @@ const SlidebarComponent = ({ curentpage }) => {
                         <img src={history} alt='print' width="20px" />
                         <div>Quản lý đơn hàng</div>
                     </div>
-                    <div className={`wrap-item ${curentpage === 4 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/print-history")}>
+                    <div className={`wrap-item ${curentpage === 5 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/rate_store")}>
+                        <img src={rate} alt='history' width="20px" />
+                        <div>Đánh giá cửa hàng</div>
+                    </div>
+                    <div className={`wrap-item ${curentpage === 4 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/static_sale")}>
                         <img src={report} alt='history' width="20px" />
-                        <div>Thống kê sản phẩm</div>
+                        <div>Thống kê bán hàng</div>
+                    </div>
+                    <div className={`wrap-item ${curentpage === 6 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/shipment_history")}>
+                        <img src={ship} alt='history' width="20px" />
+                        <div>Lịch sử xuất hàng</div>
                     </div>
                     {/* <div className={`wrap-item ${curentpage === 5 ? 'select-item' : ''}`} onClick={() => handleRedirect("admin/usage-reports")}>
                         <img src={report} alt='buy-more' width="20px" />
@@ -52,15 +60,7 @@ const SlidebarComponent = ({ curentpage }) => {
                     </div> */}
                 </div>
             </div>
-            <div className='wrap-user'>
-                <div className='wrap-user-container'>
-                    <img src={user} alt='user' width="40px" />
-                    <div className='wrap-name'>
-                        <div className='text-base font-bold'>Trần Thành Tài</div>
-                        <div style={{ fontSize: '11px' }}>tai.tranthanh@hcmut.edu.vn</div>
-                    </div>
-                </div>
-            </div>
+            
         </WrapperContainer>
     );
 };
