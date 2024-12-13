@@ -138,7 +138,7 @@ CREATE TABLE DanhGia (
     MaBai INT NOT NULL,
     MaSanPham INT NOT NULL,
     MaDonHang INT NOT NULL,
-    PRIMARY KEY (MaBai, MaSanPham, MaDonHang),
+    PRIMARY KEY (MaBai),
     CONSTRAINT fk_DanhGia_BaiDanhGia FOREIGN KEY (MaBai) REFERENCES BaiDanhGia(MaBai)
     ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_DanhGia_SanPham FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham)
