@@ -16,7 +16,7 @@ const ManageOrder = () => {
   const [danh_sach_don_hang, set_danh_sach_don_hang] = useState([])
   const [Loading, SetLoading] = useState([])
 
-  const fetchProducts = async () => {
+  const fetchOrders = async () => {
     SetLoading(true)
     try {
       const res = await axios.get(`${apiUrl}order`, {
@@ -38,7 +38,7 @@ const ManageOrder = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchOrders();
   }, []);
 
 
@@ -180,7 +180,7 @@ const ManageOrder = () => {
 
         {/* Modal for details */}
         <Modal
-          title="Chi tiết sản phẩm"
+          title="Chi tiết đơn hàng"
           visible={isModalVisible}
           onCancel={handleCloseDetailsModal}
           centered={true}

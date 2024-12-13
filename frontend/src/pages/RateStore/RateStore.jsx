@@ -10,7 +10,7 @@ const RateStore = () => {
   const [danh_sach_cua_hang, set_danh_sach_cua_hang] = useState([])
   const [Loading, SetLoading] = useState([])
 
-  const fetchProducts = async () => {
+  const fetchStores = async () => {
     SetLoading(true)
     try {
       const res = await axios.get(`${apiUrl}admin/getAllStoreRatings`, {
@@ -32,7 +32,7 @@ const RateStore = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchStores();
   }, []);
 
   

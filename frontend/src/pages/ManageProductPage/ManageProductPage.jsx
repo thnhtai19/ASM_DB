@@ -125,8 +125,12 @@ const ManageProductPage = () => {
             message.success("Cập nhật sản phẩm thành công");
           }
         } catch (error) {
-          console.error("Lỗi khi cập nhật sản phẩm:", error);
-          message.error("Đã xảy ra lỗi khi cập nhật sản phẩm.");
+          if (error.response && error.response.data) {
+            const errorMessage = error.response.data.error || "Đã xảy ra lỗi!";
+            message.error(errorMessage);
+          } else {
+            message.error("Đã xảy ra lỗi không xác định!");
+          }
         }
       },
       onCancel: () => {
@@ -162,7 +166,12 @@ const ManageProductPage = () => {
         message.error("Đã xảy ra lỗi khi thêm sản phẩm.");
       }
     } catch (error) {
-      message.error("Vui lòng kiểm tra lại thông tin và thử lại.");
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message || "Đã xảy ra lỗi!";
+        message.error(errorMessage);
+      } else {
+        message.error("Đã xảy ra lỗi không xác định!");
+      }
     }
   };
   

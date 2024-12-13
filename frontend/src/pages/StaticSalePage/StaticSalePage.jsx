@@ -14,7 +14,7 @@ const StaticSalePage = () => {
   const [danh_sach_don_hang, set_danh_sach_don_hang] = useState([])
   const [Loading, SetLoading] = useState([])
 
-  const fetchProducts = async () => {
+  const fetchStatics = async () => {
     SetLoading(true)
     try {
       const res = await axios.get(`${apiUrl}admin`, {
@@ -36,7 +36,7 @@ const StaticSalePage = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchStatics();
   }, []);
 
 
@@ -112,7 +112,7 @@ const StaticSalePage = () => {
 
       {/* Modal for details */}
       <Modal
-        title="Chi tiết sản phẩm"
+        title="Chi tiết thống kê"
         visible={isModalVisible}
         onCancel={handleCloseDetailsModal}
         centered={true}
