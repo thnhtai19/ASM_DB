@@ -177,7 +177,7 @@ const deleteProduct = (req, res) => {
             //   }
             // };
             
-            const getAllProducts = (req, res) => {
+const getAllProducts = (req, res) => {
     const queryStores = 'SELECT MaCuaHang AS id, TenCuaHang AS Ten_Cua_Hang FROM CuaHang';
     const queryCategories = 'SELECT MaDanhMuc AS id, TenDanhMuc AS Ten_Danh_Muc FROM DanhMuc';
     const queryProducts = `

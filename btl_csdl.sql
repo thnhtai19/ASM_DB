@@ -95,7 +95,7 @@ CREATE TABLE DonHang (
     NgayDat DATE NOT NULL,
     PTThanhToan VARCHAR(50) NOT NULL,
     TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán') DEFAULT 'Chưa thanh toán',
-    TTDonHang ENUM('Đã giao hàng', 'Chưa giao hàng') DEFAULT 'Chưa giao hàng',
+    TTDonHang ENUM('Đã giao hàng', 'Chưa giao hàng', 'Huỷ giao hàng') DEFAULT 'Chưa giao hàng',
     MaNguoiMua CHAR(12) NOT NULL,
     CONSTRAINT fk_DonHang_NguoiMua FOREIGN KEY (MaNguoiMua) REFERENCES NguoiMua(MaNguoiMua)
     ON UPDATE CASCADE
@@ -105,7 +105,7 @@ CREATE TABLE DonHang (
 CREATE TABLE HoaDon (
     MaHoaDon INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ThoiGianTao TIMESTAMP NOT NULL,
-    TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán') DEFAULT 'Chưa thanh toán',
+    TTThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán', 'Huỷ thanh toán') DEFAULT 'Chưa thanh toán',
     TongGiaTri DECIMAL(18, 2),
     MaDonHang INT NOT NULL,
     CONSTRAINT fk_HoaDon_DonHang FOREIGN KEY (MaDonHang) REFERENCES DonHang(MaDonHang)
@@ -259,16 +259,16 @@ END; //
 DELIMITER ;
 
 -- Trigger kiểm tra mật khẩu
-DELIMITER //
-CREATE TRIGGER KiemTrakMatKhau BEFORE INSERT ON NguoiDung
-FOR EACH ROW
-BEGIN
-    IF NOT (NEW.MatKhau REGEXP '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$') THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Mật khẩu phải chứa ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.';
-    END IF;
-END; //
-DELIMITER ;
+-- DELIMITER //
+-- CREATE TRIGGER KiemTrakMatKhau BEFORE INSERT ON NguoiDung
+-- FOR EACH ROW
+-- BEGIN
+--     IF NOT (NEW.MatKhau REGEXP '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$') THEN
+-- 		SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'Mật khẩu phải chứa ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.';
+--     END IF;
+-- END; //
+-- DELIMITER ;
 
 -- Trigger kiểm tra tuổi người mua
 DELIMITER //
@@ -496,6 +496,14 @@ END //
 
 DELIMITER ;
 
+-- THÊM THỦ TỤC LẤY DANH SÁCH SẢN PHẦM Ở 1.2.1
+DELIMITER $$
+CREATE PROCEDURE LayDanhSachSanPham()
+BEGIN
+    SELECT * FROM SanPham; 
+END $$
+
+DELIMITER ;
 
 
 -- ***** Kết thúc 1.2.1 ***** ---
@@ -752,27 +760,27 @@ DELIMITER ;
 -- Dữ liệu mẫu cho bảng NguoiDung
 INSERT INTO NguoiDung (CCCD, MatKhau, Email, HoTen, SDT) VALUES
 -- Người mua
-('001062946357', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'a@gmail.com', 'Nguyễn Văn A', '0912345678'),
-('066200000274', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'vunguyen@gmail.com', 'Nguyễn Minh Vũ', '0934127856'),
-('037962011863', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'congthanh2002@gmail.com', 'Nguyễn Thành Công', '0914723685'),
-('011167000556', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'bagiang147@gmail.com', 'Giảng Thị Bà', '0918324657'),
-('012345678911', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'hueto123@gmail.com', 'Tô Văn Huệ', '0912345687'),
-('083204000946', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'thinh.nguyen04@hcmut.edu.vn', 'Nguyễn Trường Thịnh', '0838592692'),
+('001062946357', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'a@gmail.com', 'Nguyễn Văn A', '0912345678'),
+('066200000274', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'vunguyen@gmail.com', 'Nguyễn Minh Vũ', '0934127856'),
+('037962011863', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'congthanh2002@gmail.com', 'Nguyễn Thành Công', '0914723685'),
+('011167000556', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'bagiang147@gmail.com', 'Giảng Thị Bà', '0918324657'),
+('012345678911', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'hueto123@gmail.com', 'Tô Văn Huệ', '0912345687'),
+('083204000946', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'thinh.nguyen04@hcmut.edu.vn', 'Nguyễn Trường Thịnh', '0838592692'),
 
 -- Người bán
-('083811234432', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'truongthinhbte@gmail.com.vn', 'Nguyễn Ngọc Thịnh', '0918382947'),
-('032532297682', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'b@gmail.com', 'Tran Thi B', '0923456789'),
-('038180000947', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'liemphan@gmail.com', 'Phan Thị Liêm', '0945680888'),
-('001062946358', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'tranthib@gmail.com', 'Trần Thị Bình', '0917654321'),
-('001062946359', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'leminhc@gmail.com', 'Lê Minh Châu', '0981234567'),
-('001062946360', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'phamvuongd@gmail.com', 'Phạm Vương Dũng', '0938765432'),
-('001062946361', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'hoanghonganh@gmail.com', 'Hoàng Hồng Anh', '0975432198'),
-('001062946362', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'danghuuthang@gmail.com', 'Đặng Hữu Thắng', '0923456781'),
-('001062946363', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'vothituyet@gmail.com', 'Võ Thị Tuyết', '0945678912'),
-('001062946364', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'dongthanhdat@gmail.com', 'Đồng Thành Đạt', '0967891234'),
+('083811234432', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'truongthinhbte@gmail.com.vn', 'Nguyễn Ngọc Thịnh', '0918382947'),
+('032532297682', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'b@gmail.com', 'Tran Thi B', '0923456789'),
+('038180000947', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'liemphan@gmail.com', 'Phan Thị Liêm', '0945680888'),
+('001062946358', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'tranthib@gmail.com', 'Trần Thị Bình', '0917654321'),
+('001062946359', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'leminhc@gmail.com', 'Lê Minh Châu', '0981234567'),
+('001062946360', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'phamvuongd@gmail.com', 'Phạm Vương Dũng', '0938765432'),
+('001062946361', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'hoanghonganh@gmail.com', 'Hoàng Hồng Anh', '0975432198'),
+('001062946362', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'danghuuthang@gmail.com', 'Đặng Hữu Thắng', '0923456781'),
+('001062946363', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'vothituyet@gmail.com', 'Võ Thị Tuyết', '0945678912'),
+('001062946364', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'dongthanhdat@gmail.com', 'Đồng Thành Đạt', '0967891234'),
 
 -- Admin
-('111122223333', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'admin@gmail.com', 'Admin', '0753826373');
+('111122223333', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'admin@gmail.com', 'Admin', '0753826373');
 
 -- Dữ liệu mẫu cho bảng Người mua
 INSERT INTO NguoiMua (MaNguoiMua, NgaySinh) VALUES

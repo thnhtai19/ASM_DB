@@ -5,8 +5,8 @@ const  authenticateToken  = require('../helper/authMiddleware');
 
 router.get('/',authenticateToken,orderController.getAllBuyersAndOrders);
 
-router.get('/statistics', authenticateToken, orderController.getOrderStatisticsByDate);
+router.post('/statistics', authenticateToken, orderController.getOrderStatisticsByDate);
 
-router.put('/update',authenticateToken,orderController.updateOrderStatus);
+router.post('/update',authenticateToken,orderController.updateOrderStatus);
 
 module.exports = router;
