@@ -377,6 +377,7 @@ DELIMITER ;
 
 -- Thủ tục thêm dữ liệu vào bảng SanPham
 DELIMITER //
+
 CREATE PROCEDURE ThemSanPham(
     IN p_MoTa VARCHAR(255),
     IN p_Loai VARCHAR(100),
@@ -387,35 +388,54 @@ CREATE PROCEDURE ThemSanPham(
     IN p_Gia DECIMAL(18, 2)
 )
 BEGIN
+    IF p_MoTa IS NULL OR p_MoTa = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Mô tả sản phẩm không được để trống.';
+    END IF;
+
+    IF p_Loai IS NULL OR p_Loai = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Loại sản phẩm không được để trống.';
+    END IF;
+
     IF p_TenSanPham IS NULL OR p_TenSanPham = '' THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Tên sản phẩm không được để trống.';
     END IF;
+
     IF p_SoLuong < 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Số lượng sản phẩm không được nhỏ hơn 0.';
     END IF;
+
+    
     IF p_Gia <= 0 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Giá sản phẩm phải lớn hơn 0.';
     END IF;
+
     IF NOT EXISTS (SELECT 1 FROM DanhMuc WHERE MaDanhMuc = p_MaDanhMuc) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Mã danh mục không tồn tại.';
     END IF;
+
     IF NOT EXISTS (SELECT 1 FROM CuaHang WHERE MaCuaHang = p_MaCuaHang) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Mã cửa hàng không tồn tại.';
     END IF;
+
+
     IF EXISTS (SELECT 1 FROM SanPham WHERE TenSanPham = p_TenSanPham) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Sản phẩm đã tồn tại.';
     END IF;
+
     INSERT INTO SanPham (MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia)
     VALUES (p_MoTa, p_Loai, p_TenSanPham, p_MaDanhMuc, p_MaCuaHang, p_SoLuong, p_Gia);
-
 END //
+
 DELIMITER ;
+
 
 
 -- Thủ tục cập nhật dữ liệu vào bảng SanPham
