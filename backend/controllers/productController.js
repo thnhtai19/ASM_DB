@@ -3,46 +3,67 @@ const db = require('../models/db');
 
 const addProduct = async (req, res) => {
     const { MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
-    if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
-    if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
-    if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
-    if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
-    if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
-    if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
-    if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
     
     try {
         const result = await productModel.themSanPham(MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia);
         res.status(200).json({
             message: 'Thêm sản phẩm thành công.',
-      data: result,
-    });
-} catch (err) {
-    console.error('Lỗi khi thêm sản phẩm:', err);
-    if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm đã tồn tại')) {
-        return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
-    }
-    if (err.code === 'ER_SIGNAL_EXCEPTION') {
-        if (err.sqlMessage.includes('Mã danh mục không tồn tại')) {
-            return res.status(400).json({ message: 'Mã danh mục không tồn tại.' });
-        } else if (err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
-            return res.status(400).json({ message: 'Mã cửa hàng không tồn tại.' });
+            data: result,
+        });
+    } catch (err) {
+        console.error('Lỗi khi thêm sản phẩm:', err);
+        if (err.code === 'ER_SIGNAL_EXCEPTION') {
+            return res.status(400).json({ message: err.sqlMessage });
         }
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
+        }
+        res.status(500).json({ message: 'Có lỗi xảy ra khi thêm sản phẩm.', error: err });
     }
-    if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
-    } else if (err.code === 'ER_NO_REFERENCED_ROW') {
-        return res.status(400).json({ message: 'Mã danh mục hoặc mã cửa hàng không tồn tại.' });
-    }
-    res.status(500).json({ message: 'Có lỗi xảy ra khi thêm sản phẩm.' });
-}
 };
+
+// const addProduct = async (req, res) => {
+//     const { MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+//     if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
+//     if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
+//     if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
+//     if (!MaDanhMuc) return res.status(400).json({ message: 'Thiếu mã danh mục.' });
+//     if (!MaCuaHang) return res.status(400).json({ message: 'Thiếu mã cửa hàng.' });
+//     if (SoLuong == null || SoLuong <= 0) return res.status(400).json({ message: 'Số lượng phải là một số nguyên dương.' });
+//     if (Gia == null || Gia <= 0) return res.status(400).json({ message: 'Giá sản phẩm phải là một số dương.' });
+    
+//     try {
+//         const result = await productModel.themSanPham(MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia);
+//         res.status(200).json({
+//             message: 'Thêm sản phẩm thành công.',
+//       data: result,
+//     });
+//     } catch (err) {
+//         console.error('Lỗi khi thêm sản phẩm:', err);
+//         if (err.code === 'ER_SIGNAL_EXCEPTION' && err.sqlMessage.includes('Sản phẩm đã tồn tại')) {
+//             return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
+//         }
+//         if (err.code === 'ER_SIGNAL_EXCEPTION') {
+//             if (err.sqlMessage.includes('Mã danh mục không tồn tại')) {
+//                 return res.status(400).json({ message: 'Mã danh mục không tồn tại.' });
+//             } else if (err.sqlMessage.includes('Mã cửa hàng không tồn tại')) {
+//                 return res.status(400).json({ message: 'Mã cửa hàng không tồn tại.' });
+//             }
+//         }
+//         if (err.code === 'ER_DUP_ENTRY') {
+//             return res.status(409).json({ message: 'Sản phẩm đã tồn tại.' });
+//         } else if (err.code === 'ER_NO_REFERENCED_ROW') {
+//             return res.status(400).json({ message: 'Mã danh mục hoặc mã cửa hàng không tồn tại.' });
+//         }
+//         res.status(500).json({ message: 'Có lỗi xảy ra khi thêm sản phẩm.' });
+//     }
+// };
 
 
 // const updateProduct = (req, res) => {
-//     const {MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
-//     if (!MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || SoLuong == null || Gia == null) {
-//         //if (!MaSanPham) return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
+    //     const {MoTa, Loai, TenSanPham, MaDanhMuc, MaCuaHang, SoLuong, Gia } = req.body;
+    //     if (!MoTa || !Loai || !TenSanPham || !MaDanhMuc || !MaCuaHang || SoLuong == null || Gia == null) {
+        //         //if (!MaSanPham) return res.status(400).json({ message: 'Thiếu mã sản phẩm.' });
 //         //if (!MoTa) return res.status(400).json({ message: 'Thiếu mô tả sản phẩm.' });
 //         //if (!Loai) return res.status(400).json({ message: 'Thiếu loại sản phẩm.' });
 //         if (!TenSanPham) return res.status(400).json({ message: 'Thiếu tên sản phẩm.' });
