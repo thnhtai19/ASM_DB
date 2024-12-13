@@ -1,13 +1,43 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import {message} from 'antd'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const isLoggedIn = sessionStorage.getItem("isLogin") === "true";
+
+  if(isLoggedIn){
+    window.location.href = '/admin/product'
+  }
+
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Xử lý đăng nhập ở đây
-    console.log('Đăng nhập với:', { username, password });
+    try {
+      const response = await axios.post(`${apiUrl}admin/login`, {
+        email: username,
+        matkhau: password
+      },
+      {
+        withCredentials: true,
+      });
+
+      if(response.data.message === 'Admin đăng nhập thành công'){
+        message.success('Đăng nhập thành công!');
+        sessionStorage.setItem("isLogin", true);
+        setTimeout(() => {
+          window.location.href = '/admin/product'
+        }, 2000);
+      }else{
+        message.error('Sai tài khoản hoặc mật khẩu!');
+      }
+    } catch (err) {
+        message.error(err.response.data.error)
+    }
   };
 
   return (
